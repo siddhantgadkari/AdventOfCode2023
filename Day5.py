@@ -90,7 +90,7 @@ def partTwo():
 
     print(seedRanges)
     minLocations = []
-    for sr in seedRanges[:1]:
+    for sr in seedRanges:
         print(sr)
         mcount = 0
         processed, raw = [], [sr]
@@ -118,25 +118,30 @@ def partTwo():
                 # can completely convert currRange; no residue
                 if currRangeStart >= start and currRangeEnd <= start + rlen:
                     processed.append((convStart + (currRangeStart - start), convStart + (currRangeStart - start) + currRangeEnd - currRangeStart))
+                    rangePtr = 0
                 # can partially convert only from left; right residue    
                 elif currRangeStart >= start and currRangeStart < start + rlen < currRangeEnd:
                     processed.append((convStart + (currRangeStart - start), convStart + rlen))
                     raw.append((start + rlen, currRangeEnd))
+                    rangePtr = 0
                 # can partially convert only from right; left residue
                 elif currRangeStart < start < currRangeEnd and currRangeEnd <= start + rlen:
                     processed.append((convStart, convStart + (currRangeEnd - start)))
                     raw.append((currRangeStart, start))
+                    rangePtr = 0
                 # only centre partial can be converted; left and right residues
                 elif currRangeStart <= start and currRangeEnd >= start + rlen: 
                     processed.append((convStart, convStart + rlen))
                     raw.append((currRangeStart, start))
                     raw.append((start + rlen, currRangeEnd))
+                    rangePtr = 0 
                 # no conversion possible at all
                 else:
                     raw.append((currRangeStart, currRangeEnd))
+                    rangePtr += 1
                 # print("P ", processed)
                 # print("R ", raw)
-                rangePtr += 1
+                
             # print("Pe ", processed)
             # print("Re ", raw)
             raw = processed
