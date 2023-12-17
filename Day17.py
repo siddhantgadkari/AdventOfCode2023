@@ -19,10 +19,11 @@ def partOne():
     # linM is (count, direction string)
     # costs has: {dst : (src, cost), ...}
     costs, q = {}, PriorityQueue()
-    q.put((0, ((0, 0), (0, 0), (1, "left"))))
+    q.put((grid[0][0], ((0, 0), (0, 0), (1, "left"))))
     dirs = {"right":(0, 1), "left":(0, -1), "down":(1, 0), "up":(-1, 0)}
     while not q.empty():
         edge = q.get()
+        print(edge)
         cost = edge[0]
         src, dst, linM = edge[1]
         # put or update costs edge if needed
@@ -30,22 +31,26 @@ def partOne():
             costs[dst] = (src, cost)
             print(costs)
         currR, currC = dst 
-        for dir, move in dirs.items(): 
+        for d, move in dirs.items(): 
             dr, dc = move
             next = (currR + dr, currC + dc)
             if not validCoord(rows, cols, next) or next == src:
                 continue
             # need to handle linear movement
-            if dir == linM[1]:
+            if d == linM[1]:
                 # node has come via 3 linear steps
                 if linM[0] == 3:
                     continue
-                q.put((grid[next[0]][next[1]], 
+                # print((cost + grid[next[0]][next[1]], 
+                #        (dst, next, (linM[0] + 1, linM[1]))))
+                q.put((cost + grid[next[0]][next[1]], 
                        (dst, next, (linM[0] + 1, linM[1]))))
             else: 
-                q.put((grid[next[0]][next[1]], 
-                       (dst, next, (1, dir))))
-        print(q)
+                # print((cost + grid[next[0]][next[1]], 
+                #        (dst, next, (1, d))))
+                q.put((cost + grid[next[0]][next[1]], 
+                       (dst, next, (1, d))))
+
     
     start = (0, 0)
     curr = (cols - 1, rows - 1)
